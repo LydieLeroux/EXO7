@@ -1,39 +1,33 @@
-name: Exo 7
-## Objectifs
-## Créer un workflow de base compatible avec une application de type React + Vite
+name: Exercice 07 Workflow
+on: [push, workflow_dispatch]
 
-## Sujet
-## Réaliser un workflow GitHub Actions permettant, pour le code source se trouvant dans cette [archive](./exercice-07.zip),
-## de faire les tests unitaires ainsi que la vérification de la compilation du projet. Ces deux vérifications devront se 
-## faire dans des jobs qui idéalement optimiseront le temps de traitement afin de consommer le moins de crédits possible.
-on: ["workflow_dispatch","push"]
+jobs:
+  build-app:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Source Code
+        uses: actions/checkout@v6
+      - name: Setup NodeJS
+        uses: actions/setup-node@v6
+        with:
+          node-version: "25.2.1"
+      - name: Install dependencies
+        run: npm ci
+      - name: Build website
+        run: npm run build
+      - name: Test Building
+        run: ls build/index.html
 
-jobs:  
-    build-app:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Get source code
-              uses: actions/checkout@v6
-            - name: Set up Node js
-              uses: actions/setup-node@v6 
-              with:
-                node-version: "24.11.1"
-            - name: Installation des dépendances
-              uses: npm ci
-            - name: Build website
-              uses: npm run build
-            - name: Test build completion
-              run: ls build/index.html  
-    test-app:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Get source code
-              uses: actions/checkout@v6
-            - name: Set up Node js
-              uses: actions/setup-node@v6 
-              with:
-                node-version: "24.11.1"
-            - name: Installation des dépendances
-              uses: npm ci
-            - name: Run unit tests
-              uses: npm run test 
+  test-app:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Source Code
+        uses: actions/checkout@v6
+      - name: Setup NodeJS
+        uses: actions/setup-node@v6
+        with:
+          node-version: "25.2.1"
+      - name: Install dependencies
+        run: npm ci
+      - name: Run Unit tests
+        run: npm run test
